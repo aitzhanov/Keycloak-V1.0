@@ -1,0 +1,156 @@
+# Copyright 2026 Президентский центр Республики Казахстан
+# License: AGPL-3.0 or later (http://www.gnu.org/licenses/agpl)
+
+import logging
+
+from odoo import Command, _, api, fields, models
+from odoo.exceptions import AccessDenied
+
+_logger = logging.getLogger(__name__)
+
+
+class ResUsers(models.Model):
+    _inherit = "res.users"
+
+    keycloak_logout_epoch = fields.Integer(
+        default=0,
+        copy=False,
+        help="Bumped on Keycloak back-channel logout. It is part of the "
+        "session token (see _get_session_token_fields), so incrementing it "
+        "invalidates all of this user's active Odoo sessions.",
+    )
+
+    def _get_session_token_fields(self):
+        # Adding our epoch to the session-token fields lets a back-channel
+        # logout invalidate every active session of the user just by bumping it.
+        return super()._get_session_token_fields() | {"keycloak_logout_epoch"}
+
+    @api.model
+    def _keycloak_backchannel_logout(self, provider, sub=None, sid=None):
+        """End Odoo sessions for the subject of a Back-Channel Logout Token.
+
+        Matches users by the stable oauth_uid (sub). Session-specific logout by
+        `sid` alone is not supported (Odoo does not persist the Keycloak sid per
+        session); such tokens fall back to no-op with a log line.
+        """
+        if not sub:
+            _logger.info("Back-channel logout without sub (sid=%s) — skipped", sid)
+            return self.browse()
+        users = self.sudo().search(
+            [("oauth_provider_id", "=", provider.id), ("oauth_uid", "=", sub)]
+        )
+        for user in users:
+            user.keycloak_logout_epoch = (user.keycloak_logout_epoch or 0) + 1
+        return users
+
+    # ------------------------------------------------------------------ #
+    #  Sign-in / provisioning                                            #
+    # ------------------------------------------------------------------ #
+
+    def _auth_oauth_signin(self, provider, validation, params):
+        """Add ЦПФ Keycloak specifics around the standard OAuth sign-in.
+
+        - enforce email_verified (ТЗ §5.5, §6.2);
+        - let auth_oauth/auth_oidc match/create the user by the stable sub;
+        - reconcile Odoo groups from Keycloak roles on every login (ТЗ §5.4).
+        """
+        provider_rec = self.env["auth.oauth.provider"].sudo().browse(provider)
+        keycloak = provider_rec.is_keycloak
+
+        if keycloak:
+            self._keycloak_check_email_verified(provider_rec, validation)
+
+        login = super()._auth_oauth_signin(provider, validation, params)
+
+        if keycloak and login:
+            oauth_uid = validation.get("user_id") or validation.get("sub")
+            user = self.sudo().search(
+                [("oauth_uid", "=", oauth_uid), ("oauth_provider_id", "=", provider)],
+                limit=1,
+            )
+            if user:
+                user._keycloak_reconcile_groups(provider_rec, validation, params)
+                provider_rec._keycloak_audit(
+                    "login_success",
+                    oauth_uid=oauth_uid,
+                    user=user,
+                    result="success",
+                )
+        return login
+
+    def _generate_signup_values(self, provider, validation, params):
+        """Enrich the created account from Keycloak claims (ТЗ §4.3)."""
+        values = super()._generate_signup_values(provider, validation, params)
+        provider_rec = self.env["auth.oauth.provider"].sudo().browse(provider)
+        if not provider_rec.is_keycloak:
+            return values
+
+        given = (validation.get("given_name") or "").strip()
+        family = (validation.get("family_name") or "").strip()
+        full = " ".join(part for part in (given, family) if part)
+        if full:
+            values["name"] = full
+        elif validation.get("name"):
+            values["name"] = validation["name"]
+
+        # preferred_username is only a fallback login when no e-mail is present.
+        if not validation.get("email") and validation.get("preferred_username"):
+            values["login"] = validation["preferred_username"]
+
+        provider_rec._keycloak_audit(
+            "jit_create",
+            oauth_uid=validation.get("user_id") or validation.get("sub"),
+            result="success",
+        )
+        return values
+
+    # ------------------------------------------------------------------ #
+    #  Helpers                                                            #
+    # ------------------------------------------------------------------ #
+
+    def _keycloak_check_email_verified(self, provider_rec, validation):
+        """Block login/provisioning when the e-mail is not verified."""
+        if not provider_rec.enforce_email_verified:
+            return
+        verified = validation.get("email_verified")
+        if verified in (True, "true", "True", 1):
+            return
+        provider_rec._keycloak_audit(
+            "login_denied",
+            oauth_uid=validation.get("user_id") or validation.get("sub"),
+            result="denied",
+            reason="email_not_verified",
+        )
+        _logger.info("Keycloak login refused: email_verified is not true")
+        raise AccessDenied(_("Your e-mail is not verified in Keycloak."))
+
+    def _keycloak_reconcile_groups(self, provider_rec, validation, params):
+        """Add groups for present roles, remove groups for absent roles.
+
+        Only groups that appear in this provider's mapping table are touched;
+        groups a user has for other reasons are left untouched.
+        """
+        self.ensure_one()
+        mappings = provider_rec.role_mapping_ids.filtered("active")
+        if not mappings:
+            return
+        roles = provider_rec._keycloak_extract_roles(validation, params)
+
+        managed = mappings.mapped("group_id")
+        wanted = mappings.filtered(
+            lambda m: m.keycloak_role in roles
+        ).mapped("group_id")
+        unwanted = managed - wanted
+
+        commands = [Command.link(g.id) for g in wanted]
+        commands += [Command.unlink(g.id) for g in unwanted]
+        if commands:
+            # Odoo 19 renamed res.users.groups_id -> group_ids.
+            self.sudo().write({"group_ids": commands})
+            provider_rec._keycloak_audit(
+                "groups_reconciled",
+                oauth_uid=validation.get("user_id") or validation.get("sub"),
+                user=self,
+                result="success",
+                reason="roles=%s" % sorted(roles),
+            )

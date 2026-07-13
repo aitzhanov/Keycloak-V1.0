@@ -1,0 +1,59 @@
+<?xml version="1.0" ?>
+<odoo>
+    <record model="ir.ui.view" id="view_keycloak_provider_form">
+        <field name="name">auth.keycloak.provider.form</field>
+        <field name="model">auth.oauth.provider</field>
+        <field name="inherit_id" ref="auth_oauth.view_oauth_provider_form" />
+        <field name="arch" type="xml">
+
+            <field name="client_id" position="after">
+                <field name="is_keycloak" />
+            </field>
+
+            <xpath expr="//sheet" position="inside">
+                <group
+                    string="Keycloak (ЦПФ)"
+                    invisible="not is_keycloak"
+                    col="4"
+                >
+                    <group colspan="2">
+                        <field
+                            name="keycloak_server_url"
+                            placeholder="https://sso.example.kz/auth"
+                        />
+                        <field name="keycloak_realm" placeholder="cpf-external" />
+                        <field name="keycloak_discovery_url" readonly="1" />
+                    </group>
+                    <group colspan="2">
+                        <field name="use_pkce" />
+                        <field name="enforce_email_verified" />
+                        <field name="enable_backchannel_logout" />
+                        <field name="keycloak_end_session_endpoint" readonly="1" />
+                    </group>
+                    <button
+                        name="action_keycloak_test_connection"
+                        type="object"
+                        string="Test Connection"
+                        class="btn-primary"
+                        icon="fa-plug"
+                        colspan="4"
+                    />
+                </group>
+
+                <group
+                    string="Role mapping — Keycloak role → Odoo group"
+                    invisible="not is_keycloak"
+                >
+                    <field name="role_mapping_ids" nolabel="1">
+                        <list editable="bottom">
+                            <field name="keycloak_role" />
+                            <field name="group_id" />
+                            <field name="active" widget="boolean_toggle" />
+                        </list>
+                    </field>
+                </group>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>
