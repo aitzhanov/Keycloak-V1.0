@@ -15,13 +15,14 @@
     "external_dependencies": {"python": ["python-jose"]},
     "data": [
         "security/ir.model.access.csv",
-        "security/auth_keycloak_audit_security.csv",
         "views/auth_oauth_provider_views.xml",
         "views/auth_keycloak_menus.xml",
-        "data/auth_keycloak_provider_data.xml",
-        "i18n/en.po",
-        "i18n/ru.po",
-        "i18n/kk.po",
+        # NOTE (integration): data/auth_keycloak_provider_data.xml is intentionally
+        # NOT loaded — it hardcodes a specific environment (fictional cpf-external
+        # realm) which breaks portability (ТЗ §7.4) and currently has invalid
+        # fields. Kept as a reference stub; see docs/provider_president_center.
+        # example.xml for a correct, real-realm example. Translations (i18n/*.po)
+        # are auto-loaded by Odoo per installed language — not listed here.
     ],
     "installable": True,
     "application": False,

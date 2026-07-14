@@ -13,124 +13,164 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#. module: auth_keycloak
 msgid "Keycloak Audit Log"
 msgstr "Журнал аудита Keycloak"
 
+#. module: auth_keycloak
 msgid "Audit Log Entry"
 msgstr "Запись журнала аудита"
 
+#. module: auth_keycloak
 msgid "Event"
 msgstr "Событие"
 
+#. module: auth_keycloak
 msgid "Timestamp"
 msgstr "Дата и время"
 
+#. module: auth_keycloak
 msgid "Identity"
 msgstr "Идентификация"
 
+#. module: auth_keycloak
 msgid "Details"
 msgstr "Подробности"
 
+#. module: auth_keycloak
 msgid "Provider"
 msgstr "Провайдер"
 
+#. module: auth_keycloak
 msgid "OAuth UID (sub)"
 msgstr "OAuth UID (sub)"
 
+#. module: auth_keycloak
 msgid "User"
 msgstr "Пользователь"
 
+#. module: auth_keycloak
 msgid "Result"
 msgstr "Результат"
 
+#. module: auth_keycloak
 msgid "Reason"
 msgstr "Причина"
 
+#. module: auth_keycloak
 msgid "IP Address"
 msgstr "IP-адрес"
 
+#. module: auth_keycloak
 msgid "Login — Success"
 msgstr "Вход — Успешно"
 
+#. module: auth_keycloak
 msgid "Login — Denied"
 msgstr "Вход — Отказано"
 
+#. module: auth_keycloak
 msgid "JIT User Created"
 msgstr "JIT: создан пользователь"
 
+#. module: auth_keycloak
 msgid "Groups Reconciled"
 msgstr "Группы синхронизированы"
 
+#. module: auth_keycloak
 msgid "Back-Channel Logout"
 msgstr "Back-Channel выход"
 
+#. module: auth_keycloak
 msgid "Logout — Denied"
 msgstr "Выход — Отказано"
 
+#. module: auth_keycloak
 msgid "Success"
 msgstr "Успешно"
 
+#. module: auth_keycloak
 msgid "Denied"
 msgstr "Отказано"
 
+#. module: auth_keycloak
 msgid "Error"
 msgstr "Ошибка"
 
+#. module: auth_keycloak
 msgid "Search Audit Log"
 msgstr "Поиск по журналу аудита"
 
+#. module: auth_keycloak
 msgid "Login Success"
 msgstr "Вход успешен"
 
+#. module: auth_keycloak
 msgid "Login Denied"
 msgstr "Вход отклонён"
 
+#. module: auth_keycloak
 msgid "JIT Created"
 msgstr "JIT создание"
 
+#. module: auth_keycloak
 msgid "Event Type"
 msgstr "Тип события"
 
+#. module: auth_keycloak
 msgid "Day"
 msgstr "День"
 
+#. module: auth_keycloak
 msgid "Keycloak"
 msgstr "Keycloak"
 
+#. module: auth_keycloak
 msgid "Audit Log"
 msgstr "Журнал аудита"
 
+#. module: auth_keycloak
 msgid "No audit events yet."
 msgstr "Событий пока нет."
 
+#. module: auth_keycloak
 msgid "Events are recorded automatically on every SSO login, logout, and JIT user creation."
 msgstr "События записываются автоматически при каждом SSO-входе, выходе и JIT-создании пользователя."
 
 # --- auth_oauth_provider / role mapping strings (core team) ---
 
+#. module: auth_keycloak
 msgid "Authentication — Keycloak (SSO for ЦПФ)"
 msgstr "Аутентификация — Keycloak (SSO для ЦПФ)"
 
+#. module: auth_keycloak
 msgid "Keycloak Realm"
 msgstr "Realm Keycloak"
 
+#. module: auth_keycloak
 msgid "Keycloak Server URL"
 msgstr "URL сервера Keycloak"
 
+#. module: auth_keycloak
 msgid "Use PKCE"
 msgstr "Использовать PKCE"
 
+#. module: auth_keycloak
 msgid "Enforce Email Verified"
 msgstr "Требовать подтверждённый email"
 
+#. module: auth_keycloak
 msgid "Enable Back-Channel Logout"
 msgstr "Включить Back-Channel выход"
 
+#. module: auth_keycloak
 msgid "Role Mappings"
 msgstr "Маппинг ролей"
 
+#. module: auth_keycloak
 msgid "Keycloak Role"
 msgstr "Роль Keycloak"
 
+#. module: auth_keycloak
 msgid "Odoo Group"
 msgstr "Группа Odoo"

@@ -13,124 +13,164 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+#. module: auth_keycloak
 msgid "Keycloak Audit Log"
 msgstr "Keycloak аудит журналы"
 
+#. module: auth_keycloak
 msgid "Audit Log Entry"
 msgstr "Аудит журналының жазбасы"
 
+#. module: auth_keycloak
 msgid "Event"
 msgstr "Оқиға"
 
+#. module: auth_keycloak
 msgid "Timestamp"
 msgstr "Уақыт белгісі"
 
+#. module: auth_keycloak
 msgid "Identity"
 msgstr "Жеке куәлік"
 
+#. module: auth_keycloak
 msgid "Details"
 msgstr "Толық мәліметтер"
 
+#. module: auth_keycloak
 msgid "Provider"
 msgstr "Провайдер"
 
+#. module: auth_keycloak
 msgid "OAuth UID (sub)"
 msgstr "OAuth UID (sub)"
 
+#. module: auth_keycloak
 msgid "User"
 msgstr "Пайдаланушы"
 
+#. module: auth_keycloak
 msgid "Result"
 msgstr "Нәтиже"
 
+#. module: auth_keycloak
 msgid "Reason"
 msgstr "Себеп"
 
+#. module: auth_keycloak
 msgid "IP Address"
 msgstr "IP мекенжайы"
 
+#. module: auth_keycloak
 msgid "Login — Success"
 msgstr "Кіру — Сәтті"
 
+#. module: auth_keycloak
 msgid "Login — Denied"
 msgstr "Кіру — Бас тартылды"
 
+#. module: auth_keycloak
 msgid "JIT User Created"
 msgstr "JIT: пайдаланушы жасалды"
 
+#. module: auth_keycloak
 msgid "Groups Reconciled"
 msgstr "Топтар синхрондалды"
 
+#. module: auth_keycloak
 msgid "Back-Channel Logout"
 msgstr "Back-Channel шығу"
 
+#. module: auth_keycloak
 msgid "Logout — Denied"
 msgstr "Шығу — Бас тартылды"
 
+#. module: auth_keycloak
 msgid "Success"
 msgstr "Сәтті"
 
+#. module: auth_keycloak
 msgid "Denied"
 msgstr "Бас тартылды"
 
+#. module: auth_keycloak
 msgid "Error"
 msgstr "Қате"
 
+#. module: auth_keycloak
 msgid "Search Audit Log"
 msgstr "Аудит журналынан іздеу"
 
+#. module: auth_keycloak
 msgid "Login Success"
 msgstr "Кіру сәтті"
 
+#. module: auth_keycloak
 msgid "Login Denied"
 msgstr "Кіру қабылданбады"
 
+#. module: auth_keycloak
 msgid "JIT Created"
 msgstr "JIT жасалуы"
 
+#. module: auth_keycloak
 msgid "Event Type"
 msgstr "Оқиға түрі"
 
+#. module: auth_keycloak
 msgid "Day"
 msgstr "Күн"
 
+#. module: auth_keycloak
 msgid "Keycloak"
 msgstr "Keycloak"
 
+#. module: auth_keycloak
 msgid "Audit Log"
 msgstr "Аудит журналы"
 
+#. module: auth_keycloak
 msgid "No audit events yet."
 msgstr "Оқиғалар әлі жоқ."
 
+#. module: auth_keycloak
 msgid "Events are recorded automatically on every SSO login, logout, and JIT user creation."
 msgstr "Оқиғалар әр SSO кіру, шығу және JIT пайдаланушы жасалу кезінде автоматты түрде тіркеледі."
 
 # --- auth_oauth_provider / role mapping strings (core team) ---
 
+#. module: auth_keycloak
 msgid "Authentication — Keycloak (SSO for ЦПФ)"
 msgstr "Аутентификация — Keycloak (ЦПФ үшін SSO)"
 
+#. module: auth_keycloak
 msgid "Keycloak Realm"
 msgstr "Keycloak Realm"
 
+#. module: auth_keycloak
 msgid "Keycloak Server URL"
 msgstr "Keycloak сервер URL"
 
+#. module: auth_keycloak
 msgid "Use PKCE"
 msgstr "PKCE пайдалану"
 
+#. module: auth_keycloak
 msgid "Enforce Email Verified"
 msgstr "Расталған email талап ету"
 
+#. module: auth_keycloak
 msgid "Enable Back-Channel Logout"
 msgstr "Back-Channel шығуды қосу"
 
+#. module: auth_keycloak
 msgid "Role Mappings"
 msgstr "Рөлдерді бейнелеу"
 
+#. module: auth_keycloak
 msgid "Keycloak Role"
 msgstr "Keycloak рөлі"
 
+#. module: auth_keycloak
 msgid "Odoo Group"
 msgstr "Odoo тобы"

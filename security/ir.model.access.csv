@@ -1,2 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_auth_keycloak_role_mapping_system,access.auth.keycloak.role.mapping.system,model_auth_keycloak_role_mapping,base.group_system,1,1,1,1
+access_keycloak_audit_log_manager,Keycloak Audit Log (Manager read),model_auth_keycloak_audit_log,base.group_system,1,0,0,0
+access_keycloak_audit_log_system,Keycloak Audit Log (System create),model_auth_keycloak_audit_log,base.group_system,1,0,1,0

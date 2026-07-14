@@ -80,18 +80,17 @@
                         domain="[('event_type','=','jit_create')]"/>
                 <filter name="backchannel_logout" string="Back-Channel Logout"
                         domain="[('event_type','=','backchannel_logout')]"/>
-                <group expand="0" string="Group By">
-                    <filter name="group_event" string="Event Type"
-                            context="{'group_by': 'event_type'}"/>
-                    <filter name="group_result" string="Result"
-                            context="{'group_by': 'result'}"/>
-                    <filter name="group_provider" string="Provider"
-                            context="{'group_by': 'provider_id'}"/>
-                    <filter name="group_user" string="User"
-                            context="{'group_by': 'user_id'}"/>
-                    <filter name="group_day" string="Day"
-                            context="{'group_by': 'create_date:day'}"/>
-                </group>
+                <separator/>
+                <filter name="group_event" string="Event Type"
+                        context="{'group_by': 'event_type'}"/>
+                <filter name="group_result" string="Result"
+                        context="{'group_by': 'result'}"/>
+                <filter name="group_provider" string="Provider"
+                        context="{'group_by': 'provider_id'}"/>
+                <filter name="group_user" string="User"
+                        context="{'group_by': 'user_id'}"/>
+                <filter name="group_day" string="Day"
+                        context="{'group_by': 'create_date:day'}"/>
             </search>
         </field>
     </record>
