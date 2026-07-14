@@ -15,7 +15,13 @@
     "external_dependencies": {"python": ["python-jose"]},
     "data": [
         "security/ir.model.access.csv",
+        "security/auth_keycloak_audit_security.csv",
         "views/auth_oauth_provider_views.xml",
+        "views/auth_keycloak_menus.xml",
+        "data/auth_keycloak_provider_data.xml",
+        "i18n/en.po",
+        "i18n/ru.po",
+        "i18n/kk.po",
     ],
     "installable": True,
     "application": False,
