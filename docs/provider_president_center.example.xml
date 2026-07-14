@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+<!--
+  EXAMPLE provider configuration for the Stage-1 Keycloak
+  (192.168.16.36:8081, realm "president-center") — built from the real
+  discovery dump (2026-07-14).
+
+  This is a REFERENCE, NOT loaded by the module (keeps auth_keycloak portable,
+  ТЗ §7.4 — no hardcoded environment). Use it one of two ways:
+    - import it via Settings ▸ Technical ▸ Import records, OR
+    - key the same values into Settings ▸ Users ▸ OAuth Providers by hand,
+      then press "Test Connection" to (re)load the endpoints from discovery.
+
+  BEFORE it works you still need TWO things from Keycloak (Мухамбет):
+    1. client_id  — an OIDC client for Odoo (create it in the realm)
+    2. client_secret — for that client (confidential), sent securely
+  Fill them in the <field> marked TODO and set enabled=True.
+
+  NOTE ON REACHABILITY: 192.168.16.36 is a private LAN. Odoo must run on a host
+  that can reach it. For local dev use the ps.kz replica instead.
+  NOTE ON email_verified: the realm has verifyEmail=false, so
+  enforce_email_verified is set False here — otherwise every login is refused.
+-->
+<odoo>
+    <record id="provider_president_center" model="auth.oauth.provider">
+        <field name="name">Keycloak — ЦПФ (president-center)</field>
+        <field name="body">Войти через Keycloak</field>
+
+        <field name="is_keycloak" eval="True" />
+        <field name="keycloak_server_url">http://192.168.16.36:8081/auth</field>
+        <field name="keycloak_realm">president-center</field>
+
+        <!-- OpenID Connect Authorization Code Flow + PKCE (S256) -->
+        <field name="flow">id_token_code</field>
+        <field name="use_pkce" eval="True" />
+        <field name="scope">openid profile email</field>
+
+        <!-- Endpoints (LAN-IP form; "Test Connection" refreshes them from discovery) -->
+        <field name="auth_endpoint">http://192.168.16.36:8081/auth/realms/president-center/protocol/openid-connect/auth</field>
+        <field name="token_endpoint">http://192.168.16.36:8081/auth/realms/president-center/protocol/openid-connect/token</field>
+        <field name="jwks_uri">http://192.168.16.36:8081/auth/realms/president-center/protocol/openid-connect/certs</field>
+        <field name="keycloak_end_session_endpoint">http://192.168.16.36:8081/auth/realms/president-center/protocol/openid-connect/logout</field>
+
+        <!-- Realm has verifyEmail=false → do NOT enforce, or all logins are denied -->
+        <field name="enforce_email_verified" eval="False" />
+        <!-- backchannel_logout_supported=true on this realm -->
+        <field name="enable_backchannel_logout" eval="True" />
+
+        <!-- TODO: fill from the Odoo client Мухамбет creates, then enable -->
+        <field name="client_id">odoo-portal</field>
+        <field name="client_secret"><!-- TODO: paste securely --></field>
+        <field name="enabled" eval="False" />
+    </record>
+</odoo>

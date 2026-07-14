@@ -51,3 +51,26 @@ practical exposure is limited to an Odoo-side secret leak.
 Both items should be raised with the Архитектор ПО and the Специалист по ИБ so
 the decision (implement vs. accept) is on record for acceptance criteria AC-5
 and AC-7.
+
+## 3. Stage-1 Keycloak realm findings (president-center, dump 2026-07-14)
+
+The real Stage-1 realm (`192.168.16.36:8081`, realm `president-center`) diverges
+from the ТЗ. These are **environment / configuration** items (not module code),
+but they gate the security review and several ТЗ requirements. The module is
+config-driven and adapts to each via settings, but the realm itself must be
+decided/reconfigured.
+
+| Finding (from dump) | ТЗ requirement | Impact / action |
+|---|---|---|
+| `http://…:8081`, `sslRequired: external` | §6.2 — TLS only | Put an HTTPS front (Nginx) before production. |
+| `verifyEmail: false` (and `email_verified` not advertised) | §5.5/§6.2 — login only if verified | Module: set `enforce_email_verified=False` (done in example), OR enable verifyEmail + SMTP in Keycloak. |
+| `registrationAllowed: false`, `smtpServer: {}` | UC-02/§5.2 — external self-registration | Feature impossible as-is: enable registration + SMTP, or use a dedicated external realm. |
+| Only realm role `user` (no `cpf_*`) | §5.4 — role→group mapping | Create the ЦПФ roles in Keycloak (with the Конструктор прав доступа), then fill the mapping table. |
+| No Odoo OIDC client | §7.3 | Мухамбет must create `odoo-portal` (client_id + secret + redirect `…/auth_oauth/signin`). |
+| Single realm `president-center` (existing platform realm) | §3.4 — internal + external realms | Decision: reuse existing realm vs stand up dedicated ЦПФ realm(s). |
+| Positive: `backchannel_logout_supported: true`, `end_session_endpoint` present, PKCE S256, RS256 | §4.4, §6.2 | Single Logout + PKCE + signature all supported — our logout code applies. |
+
+**Not a real issue:** the dump shows `token`/`jwks`/`userinfo` on `127.0.0.1:8081`
+because the collection script ran on the Keycloak host (localhost); when Odoo
+queries discovery via `192.168.16.36`, those endpoints come back on the LAN IP.
+Confirm Keycloak `frontendUrl`/hostname so production endpoints stay consistent.
