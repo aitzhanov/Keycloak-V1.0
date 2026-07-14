@@ -1,6 +1,7 @@
 # Copyright 2026 Президентский центр Республики Казахстан
 # License: AGPL-3.0 or later (http://www.gnu.org/licenses/agpl)
 
+from odoo.exceptions import AccessDenied
 from odoo.tests import tagged
 
 from .common import KeycloakCase
@@ -64,3 +65,29 @@ class TestRoleMapping(KeycloakCase):
         )
         self.assertNotIn(self.group_a, self.user.group_ids)
         self.assertIn(self.group_b, self.user.group_ids)
+
+    def test_conflicting_user_type_groups_denied(self):
+        # Roles mapping to two mutually-exclusive user-type groups (portal +
+        # internal) must fail the login cleanly, not with a raw traceback.
+        portal = self.env.ref("base.group_portal")
+        internal = self.env.ref("base.group_user")
+        self.env["auth.keycloak.role.mapping"].create(
+            [
+                {
+                    "provider_id": self.provider.id,
+                    "keycloak_role": "r_portal",
+                    "group_id": portal.id,
+                },
+                {
+                    "provider_id": self.provider.id,
+                    "keycloak_role": "r_internal",
+                    "group_id": internal.id,
+                },
+            ]
+        )
+        with self.assertRaises(AccessDenied):
+            self.user._keycloak_reconcile_groups(
+                self.provider,
+                {"realm_access": {"roles": ["r_portal", "r_internal"]}},
+                {},
+            )

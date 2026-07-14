@@ -4,7 +4,7 @@
 import logging
 
 from odoo import Command, _, api, fields, models
-from odoo.exceptions import AccessDenied
+from odoo.exceptions import AccessDenied, ValidationError
 
 _logger = logging.getLogger(__name__)
 
@@ -57,18 +57,31 @@ class ResUsers(models.Model):
         provider_rec = self.env["auth.oauth.provider"].sudo().browse(provider)
         keycloak = provider_rec.is_keycloak
 
+        oauth_uid = validation.get("user_id") or validation.get("sub")
+        existed = keycloak and bool(
+            self.sudo().search_count(
+                [("oauth_uid", "=", oauth_uid), ("oauth_provider_id", "=", provider)]
+            )
+        )
+
         if keycloak:
             self._keycloak_check_email_verified(provider_rec, validation)
 
         login = super()._auth_oauth_signin(provider, validation, params)
 
         if keycloak and login:
-            oauth_uid = validation.get("user_id") or validation.get("sub")
             user = self.sudo().search(
                 [("oauth_uid", "=", oauth_uid), ("oauth_provider_id", "=", provider)],
                 limit=1,
             )
             if user:
+                if not existed:
+                    provider_rec._keycloak_audit(
+                        "jit_create",
+                        oauth_uid=oauth_uid,
+                        user=user,
+                        result="success",
+                    )
                 user._keycloak_reconcile_groups(provider_rec, validation, params)
                 provider_rec._keycloak_audit(
                     "login_success",
@@ -97,11 +110,6 @@ class ResUsers(models.Model):
         if not validation.get("email") and validation.get("preferred_username"):
             values["login"] = validation["preferred_username"]
 
-        provider_rec._keycloak_audit(
-            "jit_create",
-            oauth_uid=validation.get("user_id") or validation.get("sub"),
-            result="success",
-        )
         return values
 
     # ------------------------------------------------------------------ #
@@ -131,10 +139,11 @@ class ResUsers(models.Model):
         groups a user has for other reasons are left untouched.
         """
         self.ensure_one()
-        mappings = provider_rec.role_mapping_ids.filtered("active")
+        mappings = provider_rec.role_mapping_ids.filtered("enabled")
         if not mappings:
             return
         roles = provider_rec._keycloak_extract_roles(validation, params)
+        oauth_uid = validation.get("user_id") or validation.get("sub")
 
         managed = mappings.mapped("group_id")
         wanted = mappings.filtered(
@@ -144,13 +153,40 @@ class ResUsers(models.Model):
 
         commands = [Command.link(g.id) for g in wanted]
         commands += [Command.unlink(g.id) for g in unwanted]
-        if commands:
+        if not commands:
+            return
+        try:
             # Odoo 19 renamed res.users.groups_id -> group_ids.
             self.sudo().write({"group_ids": commands})
+            # Force constraints (e.g. one-user-type) to run now so a conflict is
+            # caught here rather than surfacing later as a raw traceback.
+            self.env.flush_all()
+        except ValidationError as exc:
+            # e.g. the mapped roles grant conflicting user-type groups
+            # (portal vs internal). Fail the login cleanly instead of leaking a
+            # raw traceback, and record it for the administrator.
             provider_rec._keycloak_audit(
-                "groups_reconciled",
-                oauth_uid=validation.get("user_id") or validation.get("sub"),
+                "login_denied",
+                oauth_uid=oauth_uid,
                 user=self,
-                result="success",
-                reason="roles=%s" % sorted(roles),
+                result="denied",
+                reason="group_mapping_conflict: %s" % exc,
             )
+            _logger.warning(
+                "Keycloak role mapping produced conflicting groups for %s: %s",
+                self.login,
+                exc,
+            )
+            raise AccessDenied(
+                _(
+                    "Your Keycloak roles map to conflicting Odoo access groups. "
+                    "Please contact an administrator."
+                )
+            ) from exc
+        provider_rec._keycloak_audit(
+            "groups_reconciled",
+            oauth_uid=oauth_uid,
+            user=self,
+            result="success",
+            reason="roles=%s" % sorted(roles),
+        )

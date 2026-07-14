@@ -37,7 +37,11 @@ class AuthKeycloakRoleMapping(models.Model):
         help="Group granted to the user while the Keycloak role is present, "
         "and removed when it is not.",
     )
-    active = fields.Boolean(default=True)
+    enabled = fields.Boolean(
+        default=True,
+        help="Disable to stop this rule from being applied at login without "
+        "deleting it. (Not the magic 'active' field, so the row stays visible.)",
+    )
 
     _sql_constraints = [
         (

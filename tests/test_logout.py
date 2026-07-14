@@ -58,3 +58,27 @@ class TestLogout(KeycloakCase):
         )
         user.invalidate_recordset(["keycloak_logout_epoch"])
         self.assertEqual(user.keycloak_logout_epoch, before + 1)
+
+    def test_backchannel_actually_changes_session_token(self):
+        # Prove the epoch bump really invalidates sessions: the computed
+        # session token must differ before vs after the logout.
+        user = self.env["res.users"].create(
+            {
+                "name": "Token User",
+                "login": "token_user@example.kz",
+                "oauth_provider_id": self.provider.id,
+                "oauth_uid": "sub-token",
+            }
+        )
+        sid = "dummy-session-id"
+        self.env.flush_all()
+        token_before = user._compute_session_token(sid)
+
+        self.env["res.users"]._keycloak_backchannel_logout(
+            self.provider, sub="sub-token"
+        )
+        self.env.flush_all()
+        user.invalidate_recordset()
+        token_after = user._compute_session_token(sid)
+
+        self.assertNotEqual(token_before, token_after)
