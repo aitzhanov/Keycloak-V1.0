@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2026 Президентский центр Республики Казахстан
+     License: AGPL-3.0 or later (http://www.gnu.org/licenses/agpl)
+
+     STUB — fill in real values when Keycloak environment is confirmed.
+     Fields marked TODO must be updated before going to production.
+-->
+<odoo noupdate="1">
+
+    <record id="keycloak_provider_cpf" model="auth.oauth.provider">
+        <!-- Basic OIDC / Keycloak fields (from auth_oidc) -->
+        <field name="name">ЦПФ Keycloak SSO</field>
+
+        <!-- TODO: replace with real server URL, e.g. https://sso.pcrk.kz -->
+        <field name="server_uri">https://keycloak-host/</field>
+
+        <!-- TODO: replace with real realm name -->
+        <field name="keycloak_realm">cpf-external</field>
+
+        <!-- Derived discovery URL:
+             https://keycloak-host/realms/cpf-external/.well-known/openid-configuration
+             auth_oidc will fetch it automatically from server_uri + realm.
+        -->
+
+        <!-- TODO: set client_id issued by Keycloak admin -->
+        <field name="client_id">odoo-portal</field>
+
+        <!-- PKCE S256 enabled as required by §4.1 TZ -->
+        <field name="use_pkce">True</field>
+
+        <!-- Enforce emailVerified claim (§5.5 TZ) -->
+        <field name="enforce_email_verified">True</field>
+
+        <!-- Back-channel logout endpoint enabled (§4.4 / §5.6 TZ) -->
+        <field name="enable_backchannel_logout">True</field>
+
+        <!-- OAuth2 scope: openid + standard claims -->
+        <field name="scope">openid profile email</field>
+
+        <!-- Standard auth_oauth fields -->
+        <field name="flow">authorization_code</field>
+        <field name="token_map">sub:oauth_uid email:email given_name:given_name family_name:family_name</field>
+        <field name="enabled">False</field><!-- Enable manually after confirming config -->
+    </record>
+
+    <!-- Role → Odoo group mappings (§5.4 TZ)
+         Keycloak realm roles:  cpf-portal-user  cpf-internal-staff  cpf-admin
+         Mapped to:             portal           internal user         system
+    -->
+    <record id="keycloak_role_mapping_portal" model="auth.keycloak.role.mapping">
+        <field name="provider_id" ref="keycloak_provider_cpf"/>
+        <!-- TODO: confirm exact Keycloak role name with IdP admin -->
+        <field name="keycloak_role">cpf-portal-user</field>
+        <field name="group_id" ref="base.group_portal"/>
+    </record>
+
+    <record id="keycloak_role_mapping_internal" model="auth.keycloak.role.mapping">
+        <field name="provider_id" ref="keycloak_provider_cpf"/>
+        <field name="keycloak_role">cpf-internal-staff</field>
+        <field name="group_id" ref="base.group_user"/>
+    </record>
+
+    <record id="keycloak_role_mapping_admin" model="auth.keycloak.role.mapping">
+        <field name="provider_id" ref="keycloak_provider_cpf"/>
+        <field name="keycloak_role">cpf-admin</field>
+        <field name="group_id" ref="base.group_system"/>
+    </record>
+
+</odoo>

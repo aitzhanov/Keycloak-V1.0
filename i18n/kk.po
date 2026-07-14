@@ -1,0 +1,136 @@
+# auth_keycloak модулінің аудармасы — Қазақша
+# Copyright 2026 Қазақстан Республикасының Президенттік орталығы
+# License: AGPL-3.0 or later
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo auth_keycloak 19.0.1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-07-14 00:00+0000\n"
+"Last-Translator: Stream-2 <stream2@pcrk.kz>\n"
+"Language-Team: Kazakh\n"
+"Language: kk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Keycloak Audit Log"
+msgstr "Keycloak аудит журналы"
+
+msgid "Audit Log Entry"
+msgstr "Аудит журналының жазбасы"
+
+msgid "Event"
+msgstr "Оқиға"
+
+msgid "Timestamp"
+msgstr "Уақыт белгісі"
+
+msgid "Identity"
+msgstr "Жеке куәлік"
+
+msgid "Details"
+msgstr "Толық мәліметтер"
+
+msgid "Provider"
+msgstr "Провайдер"
+
+msgid "OAuth UID (sub)"
+msgstr "OAuth UID (sub)"
+
+msgid "User"
+msgstr "Пайдаланушы"
+
+msgid "Result"
+msgstr "Нәтиже"
+
+msgid "Reason"
+msgstr "Себеп"
+
+msgid "IP Address"
+msgstr "IP мекенжайы"
+
+msgid "Login — Success"
+msgstr "Кіру — Сәтті"
+
+msgid "Login — Denied"
+msgstr "Кіру — Бас тартылды"
+
+msgid "JIT User Created"
+msgstr "JIT: пайдаланушы жасалды"
+
+msgid "Groups Reconciled"
+msgstr "Топтар синхрондалды"
+
+msgid "Back-Channel Logout"
+msgstr "Back-Channel шығу"
+
+msgid "Logout — Denied"
+msgstr "Шығу — Бас тартылды"
+
+msgid "Success"
+msgstr "Сәтті"
+
+msgid "Denied"
+msgstr "Бас тартылды"
+
+msgid "Error"
+msgstr "Қате"
+
+msgid "Search Audit Log"
+msgstr "Аудит журналынан іздеу"
+
+msgid "Login Success"
+msgstr "Кіру сәтті"
+
+msgid "Login Denied"
+msgstr "Кіру қабылданбады"
+
+msgid "JIT Created"
+msgstr "JIT жасалуы"
+
+msgid "Event Type"
+msgstr "Оқиға түрі"
+
+msgid "Day"
+msgstr "Күн"
+
+msgid "Keycloak"
+msgstr "Keycloak"
+
+msgid "Audit Log"
+msgstr "Аудит журналы"
+
+msgid "No audit events yet."
+msgstr "Оқиғалар әлі жоқ."
+
+msgid "Events are recorded automatically on every SSO login, logout, and JIT user creation."
+msgstr "Оқиғалар әр SSO кіру, шығу және JIT пайдаланушы жасалу кезінде автоматты түрде тіркеледі."
+
+# --- auth_oauth_provider / role mapping strings (core team) ---
+
+msgid "Authentication — Keycloak (SSO for ЦПФ)"
+msgstr "Аутентификация — Keycloak (ЦПФ үшін SSO)"
+
+msgid "Keycloak Realm"
+msgstr "Keycloak Realm"
+
+msgid "Keycloak Server URL"
+msgstr "Keycloak сервер URL"
+
+msgid "Use PKCE"
+msgstr "PKCE пайдалану"
+
+msgid "Enforce Email Verified"
+msgstr "Расталған email талап ету"
+
+msgid "Enable Back-Channel Logout"
+msgstr "Back-Channel шығуды қосу"
+
+msgid "Role Mappings"
+msgstr "Рөлдерді бейнелеу"
+
+msgid "Keycloak Role"
+msgstr "Keycloak рөлі"
+
+msgid "Odoo Group"
+msgstr "Odoo тобы"

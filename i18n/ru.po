@@ -1,0 +1,136 @@
+# Перевод модуля auth_keycloak — Русский
+# Copyright 2026 Президентский центр Республики Казахстан
+# License: AGPL-3.0 or later
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo auth_keycloak 19.0.1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-07-14 00:00+0000\n"
+"Last-Translator: Stream-2 <stream2@pcrk.kz>\n"
+"Language-Team: Russian\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Keycloak Audit Log"
+msgstr "Журнал аудита Keycloak"
+
+msgid "Audit Log Entry"
+msgstr "Запись журнала аудита"
+
+msgid "Event"
+msgstr "Событие"
+
+msgid "Timestamp"
+msgstr "Дата и время"
+
+msgid "Identity"
+msgstr "Идентификация"
+
+msgid "Details"
+msgstr "Подробности"
+
+msgid "Provider"
+msgstr "Провайдер"
+
+msgid "OAuth UID (sub)"
+msgstr "OAuth UID (sub)"
+
+msgid "User"
+msgstr "Пользователь"
+
+msgid "Result"
+msgstr "Результат"
+
+msgid "Reason"
+msgstr "Причина"
+
+msgid "IP Address"
+msgstr "IP-адрес"
+
+msgid "Login — Success"
+msgstr "Вход — Успешно"
+
+msgid "Login — Denied"
+msgstr "Вход — Отказано"
+
+msgid "JIT User Created"
+msgstr "JIT: создан пользователь"
+
+msgid "Groups Reconciled"
+msgstr "Группы синхронизированы"
+
+msgid "Back-Channel Logout"
+msgstr "Back-Channel выход"
+
+msgid "Logout — Denied"
+msgstr "Выход — Отказано"
+
+msgid "Success"
+msgstr "Успешно"
+
+msgid "Denied"
+msgstr "Отказано"
+
+msgid "Error"
+msgstr "Ошибка"
+
+msgid "Search Audit Log"
+msgstr "Поиск по журналу аудита"
+
+msgid "Login Success"
+msgstr "Вход успешен"
+
+msgid "Login Denied"
+msgstr "Вход отклонён"
+
+msgid "JIT Created"
+msgstr "JIT создание"
+
+msgid "Event Type"
+msgstr "Тип события"
+
+msgid "Day"
+msgstr "День"
+
+msgid "Keycloak"
+msgstr "Keycloak"
+
+msgid "Audit Log"
+msgstr "Журнал аудита"
+
+msgid "No audit events yet."
+msgstr "Событий пока нет."
+
+msgid "Events are recorded automatically on every SSO login, logout, and JIT user creation."
+msgstr "События записываются автоматически при каждом SSO-входе, выходе и JIT-создании пользователя."
+
+# --- auth_oauth_provider / role mapping strings (core team) ---
+
+msgid "Authentication — Keycloak (SSO for ЦПФ)"
+msgstr "Аутентификация — Keycloak (SSO для ЦПФ)"
+
+msgid "Keycloak Realm"
+msgstr "Realm Keycloak"
+
+msgid "Keycloak Server URL"
+msgstr "URL сервера Keycloak"
+
+msgid "Use PKCE"
+msgstr "Использовать PKCE"
+
+msgid "Enforce Email Verified"
+msgstr "Требовать подтверждённый email"
+
+msgid "Enable Back-Channel Logout"
+msgstr "Включить Back-Channel выход"
+
+msgid "Role Mappings"
+msgstr "Маппинг ролей"
+
+msgid "Keycloak Role"
+msgstr "Роль Keycloak"
+
+msgid "Odoo Group"
+msgstr "Группа Odoo"
