@@ -66,6 +66,16 @@ class ResUsers(models.Model):
 
         if keycloak:
             self._keycloak_check_email_verified(provider_rec, validation)
+            if not existed:
+                # JIT provisioning: the SSO user is already authenticated by
+                # Keycloak, so create the account directly instead of going
+                # through Odoo's invitation-gated signup() (default scope is
+                # 'on invitation', which would otherwise reject the login).
+                vals = self._generate_signup_values(provider, validation, params)
+                # no_reset_password: SSO users authenticate via Keycloak, so
+                # suppress the "set your password" signup e-mail auth_signup
+                # would otherwise send on user creation (ТЗ §5.3).
+                self.sudo().with_context(no_reset_password=True).create(vals)
 
         login = super()._auth_oauth_signin(provider, validation, params)
 

@@ -34,8 +34,10 @@ class KeycloakSession(Session):
         response = super().logout(redirect=redirect)
 
         # Bounce to Keycloak so the SSO session ends for every application.
+        # local=False: this is a configured, trusted IdP endpoint (not user
+        # input), and request.redirect() strips external hosts by default.
         if end_session_url:
-            return request.redirect(end_session_url, 303)
+            return request.redirect(end_session_url, 303, local=False)
         return response
 
 
