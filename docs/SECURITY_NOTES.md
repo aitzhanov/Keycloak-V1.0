@@ -1,35 +1,25 @@
 # Security notes for the architect / security review
 
-Two items inherited from OCA `auth_oidc` deviate from ТЗ §6.2 (усиленные
-требования ИБ). They are not bugs in `auth_keycloak` itself, but the module is
-responsible for these requirements per the ТЗ, so a decision is needed before
-the security review (AC-7).
+One item inherited from OCA `auth_oidc` remains for review; the nonce gap has
+been closed. These are requirements the module owns per the ТЗ.
 
-## 1. `nonce` is generated but NOT validated  —  vs ТЗ §6.2 / D5
+## 1. `nonce` validation  —  ✅ RESOLVED (2026-07-15), vs ТЗ §6.2 / D5
 
-**Finding.** `auth_oidc` adds a fresh `nonce` to the authorization request
-(`controllers/main.py`) but never checks it on the callback: the value is not
-stored server-side, and nothing compares it against the `nonce` claim of the
-returned `id_token`. So the replay protection the `nonce` is meant to provide
-is not actually enforced.
+**Was.** `auth_oidc` adds a fresh `nonce` to the authorization request but never
+checked it on the callback (no server-side storage, no comparison to the
+`id_token.nonce` claim) — so replay protection was not enforced.
 
-**Current mitigations.** `state` (CSRF) is validated by core `auth_oauth`;
-transport is TLS; `id_token` signature (RS256/JWKS) and short lifetime are
-checked. These cover most of the practical risk, but not `id_token` replay
-specifically.
+**Now.** Implemented in the `auth_keycloak` layer:
+- `controllers/main.py` `KeycloakOpenIDLogin.list_providers` stashes the issued
+  nonce per provider in the session;
+- `res.users._keycloak_check_nonce` compares it to the `id_token.nonce` claim in
+  `_auth_oauth_signin` (before provisioning/login), one-time use.
+- Fail-closed on mismatch (raises AccessDenied + audit `login_denied` /
+  reason `nonce_mismatch`); fail-open when no nonce is stored (session lost /
+  unit tests) to avoid locking out legitimate users.
 
-**Options.**
-- **(A) Implement nonce validation in the `auth_keycloak` layer.** Store the
-  issued nonce (e.g. in the session, keyed by `state`) in the login controller,
-  then compare it to `id_token.nonce` inside our `_auth_oauth_signin` before
-  accepting the user. Non-trivial: touches the login flow and MUST be tested
-  end-to-end against a real Keycloak (blocked until the test Keycloak / ps.kz
-  stand or Мухамбет's data is available).
-- **(B) Accept the risk** and document it, relying on state + PKCE + TLS +
-  signature + token lifetime.
-
-**Recommendation:** plan (A) for the integration phase (when a live Keycloak is
-available to test); until then, record (B) as the interim posture.
+**Verified live** against a local Keycloak: normal login validates the nonce
+and succeeds (no skip warning, no mismatch); unit suite still green.
 
 ## 2. PKCE uses a static `code_verifier`  —  hardening
 

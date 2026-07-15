@@ -5,6 +5,7 @@ import logging
 
 from odoo import Command, _, api, fields, models
 from odoo.exceptions import AccessDenied, ValidationError
+from odoo.http import request
 
 _logger = logging.getLogger(__name__)
 
@@ -65,6 +66,7 @@ class ResUsers(models.Model):
         )
 
         if keycloak:
+            self._keycloak_check_nonce(provider, validation)
             self._keycloak_check_email_verified(provider_rec, validation)
             if not existed:
                 # JIT provisioning: the SSO user is already authenticated by
@@ -125,6 +127,38 @@ class ResUsers(models.Model):
     # ------------------------------------------------------------------ #
     #  Helpers                                                            #
     # ------------------------------------------------------------------ #
+
+    def _keycloak_check_nonce(self, provider, validation):
+        """Validate the id_token nonce against the one we issued (ТЗ §6.2).
+
+        auth_oidc generates a nonce but never checks it. The nonce we sent was
+        stashed in the session by KeycloakOpenIDLogin.list_providers; here we
+        compare it to the id_token's nonce claim to block token replay.
+
+        Fail-closed on a mismatch (replay/attack); fail-open when no nonce was
+        stored (e.g. session lost, or in unit tests without an HTTP request) so
+        legitimate users are not locked out by session edge cases.
+        """
+        if not request:
+            return
+        stored = dict(request.session.get("keycloak_nonces") or {})
+        expected = stored.pop(str(provider), None)
+        request.session["keycloak_nonces"] = stored  # one-time use
+        if expected is None:
+            _logger.warning(
+                "Keycloak nonce not found in session; skipping nonce check"
+            )
+            return
+        if validation.get("nonce") != expected:
+            provider_rec = self.env["auth.oauth.provider"].sudo().browse(provider)
+            provider_rec._keycloak_audit(
+                "login_denied",
+                oauth_uid=validation.get("user_id") or validation.get("sub"),
+                result="denied",
+                reason="nonce_mismatch",
+            )
+            _logger.warning("Keycloak nonce mismatch — replay protection triggered")
+            raise AccessDenied(_("Authentication failed (nonce mismatch)."))
 
     def _keycloak_check_email_verified(self, provider_rec, validation):
         """Block login/provisioning when the e-mail is not verified."""

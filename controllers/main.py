@@ -3,13 +3,41 @@
 
 import logging
 
-from werkzeug.urls import url_encode
+from werkzeug.urls import url_decode, url_encode
 
 from odoo import http
 from odoo.http import request
+from odoo.addons.auth_oidc.controllers.main import OpenIDLogin
 from odoo.addons.web.controllers.session import Session
 
 _logger = logging.getLogger(__name__)
+
+
+class KeycloakOpenIDLogin(OpenIDLogin):
+    """Persist the per-provider nonce so it can be validated on callback.
+
+    auth_oidc generates a nonce for the authorization request but never checks
+    it. We stash it in the session here; res.users._keycloak_check_nonce
+    compares it against the id_token's nonce claim (ТЗ §6.2 replay protection).
+    """
+
+    def list_providers(self, *args, **kwargs):
+        providers = super().list_providers(*args, **kwargs)
+        if not request:
+            return providers
+        nonces = dict(request.session.get("keycloak_nonces") or {})
+        for provider in providers:
+            if provider.get("flow") not in ("id_token", "id_token_code"):
+                continue
+            auth_link = provider.get("auth_link") or ""
+            if "?" not in auth_link:
+                continue
+            nonce = url_decode(auth_link.split("?", 1)[1]).get("nonce")
+            if nonce:
+                nonces[str(provider["id"])] = nonce
+        if nonces:
+            request.session["keycloak_nonces"] = nonces
+        return providers
 
 
 class KeycloakSession(Session):
