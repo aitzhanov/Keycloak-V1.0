@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo auth_keycloak 19.0.1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-07-14 00:00+0000\n"
+"PO-Revision-Date: 2026-07-15 00:00+0000\n"
 "Last-Translator: Stream-2 <stream2@pcrk.kz>\n"
 "Language-Team: English\n"
 "Language: en\n"
@@ -14,163 +14,209 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #. module: auth_keycloak
-msgid "Keycloak Audit Log"
-msgstr "Keycloak Audit Log"
+#: model:auth.keycloak.audit.log,_description:auth_keycloak.model_auth_keycloak_audit_log
+msgid "Keycloak SSO Audit Log"
+msgstr "Keycloak SSO Audit Log"
 
 #. module: auth_keycloak
+#: model_terms:ir.ui.view,arch_db:auth_keycloak.view_keycloak_audit_log_form
 msgid "Audit Log Entry"
 msgstr "Audit Log Entry"
 
 #. module: auth_keycloak
+#: model:ir.model.fields,field_description:auth_keycloak.field_auth_keycloak_audit_log__event_type
 msgid "Event"
 msgstr "Event"
 
 #. module: auth_keycloak
+#: model_terms:ir.ui.view,arch_db:auth_keycloak.view_keycloak_audit_log_list
 msgid "Timestamp"
 msgstr "Timestamp"
 
 #. module: auth_keycloak
+#: model_terms:ir.ui.view,arch_db:auth_keycloak.view_keycloak_audit_log_form
 msgid "Identity"
 msgstr "Identity"
 
 #. module: auth_keycloak
+#: model_terms:ir.ui.view,arch_db:auth_keycloak.view_keycloak_audit_log_form
 msgid "Details"
 msgstr "Details"
 
 #. module: auth_keycloak
+#: model:ir.model.fields,field_description:auth_keycloak.field_auth_keycloak_audit_log__provider_id
+#: model:ir.model.fields,field_description:auth_keycloak.field_auth_keycloak_role_mapping__provider_id
 msgid "Provider"
 msgstr "Provider"
 
 #. module: auth_keycloak
+#: model:ir.model.fields,field_description:auth_keycloak.field_auth_keycloak_audit_log__oauth_uid
 msgid "OAuth UID (sub)"
 msgstr "OAuth UID (sub)"
 
 #. module: auth_keycloak
+#: model:ir.model.fields,field_description:auth_keycloak.field_auth_keycloak_audit_log__user_id
 msgid "User"
 msgstr "User"
 
 #. module: auth_keycloak
+#: model:ir.model.fields,field_description:auth_keycloak.field_auth_keycloak_audit_log__result
 msgid "Result"
 msgstr "Result"
 
 #. module: auth_keycloak
+#: model:ir.model.fields,field_description:auth_keycloak.field_auth_keycloak_audit_log__reason
 msgid "Reason"
 msgstr "Reason"
 
 #. module: auth_keycloak
+#: model:ir.model.fields,field_description:auth_keycloak.field_auth_keycloak_audit_log__ip
 msgid "IP Address"
 msgstr "IP Address"
 
 #. module: auth_keycloak
+#: model:ir.model.fields.selection,name:auth_keycloak.selection__auth_keycloak_audit_log__event_type__login_success
 msgid "Login — Success"
 msgstr "Login — Success"
 
 #. module: auth_keycloak
+#: model:ir.model.fields.selection,name:auth_keycloak.selection__auth_keycloak_audit_log__event_type__login_denied
 msgid "Login — Denied"
 msgstr "Login — Denied"
 
 #. module: auth_keycloak
+#: model:ir.model.fields.selection,name:auth_keycloak.selection__auth_keycloak_audit_log__event_type__jit_create
 msgid "JIT User Created"
 msgstr "JIT User Created"
 
 #. module: auth_keycloak
+#: model:ir.model.fields.selection,name:auth_keycloak.selection__auth_keycloak_audit_log__event_type__groups_reconciled
 msgid "Groups Reconciled"
 msgstr "Groups Reconciled"
 
 #. module: auth_keycloak
+#: model:ir.model.fields.selection,name:auth_keycloak.selection__auth_keycloak_audit_log__event_type__backchannel_logout
 msgid "Back-Channel Logout"
 msgstr "Back-Channel Logout"
 
 #. module: auth_keycloak
+#: model:ir.model.fields.selection,name:auth_keycloak.selection__auth_keycloak_audit_log__event_type__logout_denied
 msgid "Logout — Denied"
 msgstr "Logout — Denied"
 
 #. module: auth_keycloak
+#: model:ir.model.fields.selection,name:auth_keycloak.selection__auth_keycloak_audit_log__result__success
 msgid "Success"
 msgstr "Success"
 
 #. module: auth_keycloak
+#: model:ir.model.fields.selection,name:auth_keycloak.selection__auth_keycloak_audit_log__result__denied
 msgid "Denied"
 msgstr "Denied"
 
 #. module: auth_keycloak
+#: model:ir.model.fields.selection,name:auth_keycloak.selection__auth_keycloak_audit_log__result__error
 msgid "Error"
 msgstr "Error"
 
 #. module: auth_keycloak
+#: model_terms:ir.ui.view,arch_db:auth_keycloak.view_keycloak_audit_log_search
 msgid "Search Audit Log"
 msgstr "Search Audit Log"
 
 #. module: auth_keycloak
+#: model_terms:ir.ui.view,arch_db:auth_keycloak.view_keycloak_audit_log_search
 msgid "Login Success"
 msgstr "Login Success"
 
 #. module: auth_keycloak
+#: model_terms:ir.ui.view,arch_db:auth_keycloak.view_keycloak_audit_log_search
 msgid "Login Denied"
 msgstr "Login Denied"
 
 #. module: auth_keycloak
+#: model_terms:ir.ui.view,arch_db:auth_keycloak.view_keycloak_audit_log_search
 msgid "JIT Created"
 msgstr "JIT Created"
 
 #. module: auth_keycloak
+#: model_terms:ir.ui.view,arch_db:auth_keycloak.view_keycloak_audit_log_search
 msgid "Event Type"
 msgstr "Event Type"
 
 #. module: auth_keycloak
+#: model_terms:ir.ui.view,arch_db:auth_keycloak.view_keycloak_audit_log_search
 msgid "Day"
 msgstr "Day"
 
 #. module: auth_keycloak
+#: model:ir.ui.menu,name:auth_keycloak.menu_keycloak_root
 msgid "Keycloak"
 msgstr "Keycloak"
 
 #. module: auth_keycloak
+#: model:ir.actions.act_window,name:auth_keycloak.action_keycloak_audit_log
+#: model:ir.ui.menu,name:auth_keycloak.menu_keycloak_audit_log
+#: model_terms:ir.ui.view,arch_db:auth_keycloak.view_keycloak_audit_log_list
+msgid "Keycloak Audit Log"
+msgstr "Keycloak Audit Log"
+
+#. module: auth_keycloak
+#: model:ir.ui.menu,name:auth_keycloak.menu_keycloak_audit_log
 msgid "Audit Log"
 msgstr "Audit Log"
 
 #. module: auth_keycloak
+#: model_terms:ir.actions.act_window,help:auth_keycloak.action_keycloak_audit_log
 msgid "No audit events yet."
 msgstr "No audit events yet."
 
 #. module: auth_keycloak
+#: model_terms:ir.actions.act_window,help:auth_keycloak.action_keycloak_audit_log
 msgid "Events are recorded automatically on every SSO login, logout, and JIT user creation."
 msgstr "Events are recorded automatically on every SSO login, logout, and JIT user creation."
 
-# --- auth_oauth_provider / role mapping strings (core team) ---
+#. module: auth_keycloak
+#: model:ir.model.fields,field_description:auth_keycloak.field_auth_oauth_provider__is_keycloak
+msgid "Keycloak provider"
+msgstr "Keycloak provider"
 
 #. module: auth_keycloak
-msgid "Authentication — Keycloak (SSO for ЦПФ)"
-msgstr "Authentication — Keycloak (SSO for ЦПФ)"
-
-#. module: auth_keycloak
-msgid "Keycloak Realm"
-msgstr "Keycloak Realm"
-
-#. module: auth_keycloak
+#: model:ir.model.fields,field_description:auth_keycloak.field_auth_oauth_provider__keycloak_server_url
 msgid "Keycloak Server URL"
 msgstr "Keycloak Server URL"
 
 #. module: auth_keycloak
+#: model:ir.model.fields,field_description:auth_keycloak.field_auth_oauth_provider__keycloak_realm
+msgid "Keycloak Realm"
+msgstr "Keycloak Realm"
+
+#. module: auth_keycloak
+#: model:ir.model.fields,field_description:auth_keycloak.field_auth_oauth_provider__use_pkce
 msgid "Use PKCE"
 msgstr "Use PKCE"
 
 #. module: auth_keycloak
+#: model:ir.model.fields,field_description:auth_keycloak.field_auth_oauth_provider__enforce_email_verified
 msgid "Enforce Email Verified"
 msgstr "Enforce Email Verified"
 
 #. module: auth_keycloak
+#: model:ir.model.fields,field_description:auth_keycloak.field_auth_oauth_provider__enable_backchannel_logout
 msgid "Enable Back-Channel Logout"
 msgstr "Enable Back-Channel Logout"
 
 #. module: auth_keycloak
+#: model:ir.model.fields,field_description:auth_keycloak.field_auth_oauth_provider__role_mapping_ids
 msgid "Role Mappings"
 msgstr "Role Mappings"
 
 #. module: auth_keycloak
+#: model:ir.model.fields,field_description:auth_keycloak.field_auth_keycloak_role_mapping__keycloak_role
 msgid "Keycloak Role"
 msgstr "Keycloak Role"
 
 #. module: auth_keycloak
+#: model:ir.model.fields,field_description:auth_keycloak.field_auth_keycloak_role_mapping__group_id
 msgid "Odoo Group"
 msgstr "Odoo Group"
